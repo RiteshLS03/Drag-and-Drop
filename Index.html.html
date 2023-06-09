@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Drag and Drop Example</title>
+  <style>
+    .container {
+      width: 50%;
+      float: left;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    
+    .item-container {
+      border: 1px solid #ccc;
+      min-height: 100px;
+      padding: 10px;
+    }
+    
+    .draggable-item {
+      background-color: #f2f2f2;
+      border: 1px solid #ccc;
+      padding: 5px;
+      margin-bottom: 5px;
+      cursor: move;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Container 1</h2>
+    <div id="container1" class="item-container" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <div id="item1" class="draggable-item" draggable="true" ondragstart="drag(event)">Item 1</div>
+      <div id="item2" class="draggable-item" draggable="true" ondragstart="drag(event)">Item 2</div>
+      <div id="item3" class="draggable-item" draggable="true" ondragstart="drag(event)">Item 3</div>
+    </div>
+  </div>
+  
+  <div class="container">
+    <h2>Container 2</h2>
+    <div id="container2" class="item-container" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    <button id="resetButton" onclick="reset()">Reset</button>
+  </div>
+
+  <script>
+    function allowDrop(event) {
+      event.preventDefault();
+    }
+
+    function drag(event) {
+      event.dataTransfer.setData("text", event.target.id);
+    }
+
+    function drop(event) {
+      event.preventDefault();
+      var data = event.dataTransfer.getData("text");
+      var element = document.getElementById(data);
+      event.target.appendChild(element);
+
+      if (event.target.id === 'container2') {
+        element.style.backgroundColor = 'lightgreen';
+        element.setAttribute('draggable', 'false');
+        showMessage('Item dropped!');
+      }
+    }
+
+    function reset() {
+      var container1 = document.getElementById('container1');
+      var container2 = document.getElementById('container2');
+      container2.innerHTML = '';
+
+      var draggableItems = document.getElementsByClassName('draggable-item');
+      for (var i = 0; i < draggableItems.length; i++) {
+        draggableItems[i].style.backgroundColor = '#f2f2f2';
+        draggableItems[i].setAttribute('draggable', 'true');
+      }
+      
+      showMessage('');
+    }
+
+    function showMessage(message) {
+      var messageContainer = document.getElementById('message');
+      messageContainer.textContent = message;
+    }
+  </script>
+</body>
+</html>
